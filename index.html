@@ -90,7 +90,7 @@ Don't forget to star the repo
             </div>
         </div>
     </div>
-    <div id="audio-player" style="z-index: 99; background: #ffffff33; width: 100%; margin: 0px; color: var(--light); backdrop-filter: blur(4px); border-top-left-radius: 10px; border-top-right-radius: 20px; padding: 10px 0;">
+<div id="audio-player" style="z-index: 99; background: #ffffff33; width: 100%; margin: 0px; color: var(--light); backdrop-filter: blur(4px); border-top-left-radius: 10px; border-top-right-radius: 20px; padding: 10px 0;">
     <!-- Song Image and Name -->
     <div class="row" style="margin: 0px; align-items: center;">
     <!-- Image section to show the album art -->
@@ -113,6 +113,18 @@ Don't forget to star the repo
         <button id="play-pause" class="control-button" onclick="togglePlayPause()">&#9658;</button>
         <button id="next" class="control-button" onclick="nextSong()">&#9654;</button>
     </div>
+
+    <!-- Progress Bar and Time -->
+    <div class="progress-container" style="margin-top: 10px;">
+        <input type="range" id="progress-slider" min="0" max="100" value="0" onchange="updateProgress()">
+        <span id="song-time">00:00 / 00:00</span>
+    </div>
+
+    <!-- Song Queue -->
+    <div id="song-queue" style="margin-top: 15px;">
+      <div id="queue-baar"></div>
+      </div>
+</div>
 
     <!-- floating downloader popup -->
     <div class=”float-button” style="width:30px; height:30px; border-radius:50%; background-color:#fff; box-shadow: 0 0 10px #000; cursor:pointer; position:fixed;top:50px; right:20px; z-index:9999;">
