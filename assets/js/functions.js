@@ -68,6 +68,62 @@ function updateSongDetails(songId) {
 
 
 //process slider code here 
+// Get references to the audio player and the progress slider
+var audioPlayer = new Audio(); // The global audio player
+var progressSlider = document.getElementById("progress-slider"); // Slider element
+
+// Function to format time in MM:SS format
+function formatTime(seconds) {
+  var minutes = Math.floor(seconds / 60);
+  var seconds = Math.floor(seconds % 60);
+  return minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0");
+}
+
+// Function to update the progress slider and song time display
+function updateProgress() {
+  // Check if a song is loaded (duration > 0)
+  if (audioPlayer.duration > 0) {
+    // Calculate progress percentage
+    var progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+    // Set the slider value
+    progressSlider.value = progress;
+  }
+
+  // Update song time display
+  var currentTimeFormatted = formatTime(audioPlayer.currentTime);
+  var durationFormatted = formatTime(audioPlayer.duration || 0); // Handle cases where duration isn't loaded yet
+  document.getElementById("song-time").textContent = currentTimeFormatted + " / " + durationFormatted;
+}
+
+// Event listener to update the slider and song time as the song plays
+audioPlayer.ontimeupdate = function() {
+  updateProgress();
+};
+
+// Event listener to allow seeking when the slider is adjusted
+progressSlider.addEventListener("input", function() {
+  // Calculate the new current time based on slider value
+  var newTime = (this.value / 100) * audioPlayer.duration;
+  // Update the current time of the audio player
+  audioPlayer.currentTime = newTime;
+  // Immediately update the time display
+  updateProgress();
+});
+
+// Example of playing a song and initializing the slider
+function playAudio(url, songDetails) {
+  audioPlayer.src = url; // Set the song source
+  audioPlayer.play(); // Start playing the song
+
+  // Update song details in the UI
+  document.getElementById("player-name").textContent = songDetails.title;
+  document.getElementById("player-album").textContent = songDetails.album;
+  document.getElementById("player-image").src = songDetails.image;
+
+  // Ensure progress and time are updated
+  updateProgress();
+}
+
 // Array of songs (example queue)
 
 // chevk process slider yaha tk
@@ -222,39 +278,61 @@ audioPlayer.onended = function () {
     }
 };
 //endcode 3 for process
-// Function to update progress slider
-// Function to update the progress slider and song time
-function updateProgress() {
-    var progressSlider = document.getElementById("progress-slider"); // Your progress slider element
-    var currentTimeFormatted = formatTime(audioPlayer.currentTime); // Format current time
-    var durationFormatted = formatTime(audioPlayer.duration); // Format duration
-    var progress = (audioPlayer.currentTime / audioPlayer.duration) * 100; // Calculate progress percentage
-
-    // Set the slider value to the percentage of song played
-    progressSlider.value = progress;
-
-    // Update the song time display
-    document.getElementById("song-time").textContent = currentTimeFormatted + " / " + durationFormatted;
-}
-
-// Event listener to update the progress slider and song time while the song is playing
-audioPlayer.ontimeupdate = function() {
-    updateProgress();
-};
+// Get references to the audio player and the progress slider
+var audioPlayer = new Audio(); // The global audio player
+var progressSlider = document.getElementById("progress-slider"); // Slider element
 
 // Function to format time in MM:SS format
 function formatTime(seconds) {
-    var minutes = Math.floor(seconds / 60);
-    var seconds = Math.floor(seconds % 60);
-    return minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0");
+  var minutes = Math.floor(seconds / 60);
+  var seconds = Math.floor(seconds % 60);
+  return minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0");
 }
 
-// Handle the progress slider change (seek feature)
-document.getElementById("progress-slider").addEventListener("input", function() {
-    var progress = this.value;
-    audioPlayer.currentTime = (progress / 100) * audioPlayer.duration; // Set current time based on slider value
-    updateProgress(); // Update song time display
+// Function to update the progress slider and song time display
+function updateProgress() {
+  // Check if a song is loaded (duration > 0)
+  if (audioPlayer.duration > 0) {
+    // Calculate progress percentage
+    var progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+    // Set the slider value
+    progressSlider.value = progress;
+  }
+
+  // Update song time display
+  var currentTimeFormatted = formatTime(audioPlayer.currentTime);
+  var durationFormatted = formatTime(audioPlayer.duration || 0); // Handle cases where duration isn't loaded yet
+  document.getElementById("song-time").textContent = currentTimeFormatted + " / " + durationFormatted;
+}
+
+// Event listener to update the slider and song time as the song plays
+audioPlayer.ontimeupdate = function() {
+  updateProgress();
+};
+
+// Event listener to allow seeking when the slider is adjusted
+progressSlider.addEventListener("input", function() {
+  // Calculate the new current time based on slider value
+  var newTime = (this.value / 100) * audioPlayer.duration;
+  // Update the current time of the audio player
+  audioPlayer.currentTime = newTime;
+  // Immediately update the time display
+  updateProgress();
 });
+
+// Example of playing a song and initializing the slider
+function playAudio(url, songDetails) {
+  audioPlayer.src = url; // Set the song source
+  audioPlayer.play(); // Start playing the song
+
+  // Update song details in the UI
+  document.getElementById("player-name").textContent = songDetails.title;
+  document.getElementById("player-album").textContent = songDetails.album;
+  document.getElementById("player-image").src = songDetails.image;
+
+  // Ensure progress and time are updated
+  updateProgress();
+}
 /// process slider run code end
 
 
