@@ -3,6 +3,118 @@
   width: -moz-fit-content;
 }
 
+.control-button {
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    color: white;
+    font-size: 20px;
+    width: 40px;
+    height: 40px;
+    margin: 0 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.control-button:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.progress-container {
+    width: 90%;
+    margin: 0 auto;
+}
+
+
+.queue-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.queue-item span {
+    font-size: 14px;
+    flex: 1;
+}
+
+.queue-item button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.queue-item button:hover {
+    background-color: #0056b3;
+}
+
+#progress-slider {
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(to right, #4caf50 0%, #4caf50 var(--progress, 0%), #ddd var(--progress, 0%), #ddd 100%);
+    border-radius: 5px;
+    outline: none;
+    transition: background 0.2s ease-in-out;
+}
+
+#progress-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background-color: #4caf50;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+
+
+
+
+
+#progress-slider {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 5px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    outline: none;
+}
+
+#progress-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#progress-slider::-webkit-slider-thumb:hover {
+    background: #ff6600;
+}
+
+
+
+
+button#dynamic-button svg {
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+button#dynamic-button svg {
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+button#dynamic-button svg:hover {
+  opacity: 1;
+}
+
 #audio-player {
   right: 0px;
   left: 0px;
@@ -126,3 +238,5 @@ footer {
 .error {
  margin : 20px;
 }
+
+
