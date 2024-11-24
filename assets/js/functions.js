@@ -25,6 +25,240 @@ if (promise) {
 }//call this to just preload the audio without playing
   audio.play(); //call this to play the song right away
 };
+// yaha se play function hai
+
+//play next previous by button 
+var results_container = document.querySelector("#saavn-results");
+var queue = []; // Queue to store song URLs
+var currentSongIndex = -1; // Track the current song index
+var audioPlayer = new Audio(); // Global audio player for playing songs
+var isPlaying = false; // To track whether the song is playing or paused
+
+// Play or Pause the song
+function togglePlayPause() {
+    if (isPlaying) {
+        audioPlayer.pause();
+        isPlaying = false;
+        document.getElementById("play-pause").innerHTML = "&#9658;"; // Change to Play icon
+    } else {
+        audioPlayer.play();
+        isPlaying = true;
+        document.getElementById("play-pause").innerHTML = "&#10074;&#10074;"; // Change to Pause icon
+    }
+}
+
+// Play a specific song from the queue
+function PlayAudio(url, songId) {
+    audioPlayer.src = url;
+    audioPlayer.play();
+    currentSongIndex = queue.indexOf(url); // Set the current index in the queue
+    updateSongDetails(songId); // Update song details on player
+    isPlaying = true;
+    document.getElementById("play-pause").innerHTML = "&#10074;&#10074;"; // Pause icon
+}
+
+// Update song details in the player
+function updateSongDetails(songId) {
+    var song = results_objects[songId].track;
+    document.getElementById("player-name").textContent = song.name;
+    document.getElementById("player-album").textContent = song.album.name;
+    document.getElementById("player-image").src = song.image[1].link;
+    document.getElementById("song-time").textContent = "00:00 / " + formatTime(song.duration); // Initialize with 0 time
+}
+
+
+//process slider code here 
+// Array of songs (example queue)
+
+// chevk process slider yaha tk
+
+// image show ke liye 
+
+
+
+// Next song in queue
+function nextSong() {
+    if (currentSongIndex + 1 < queue.length) {
+        currentSongIndex++;
+        PlayAudio(queue[currentSongIndex], queue[currentSongIndex]);
+    } else {
+        console.log("End of Queue");
+    }
+}
+
+// Previous song in queue
+function prevSong() {
+    if (currentSongIndex - 1 >= 0) {
+        currentSongIndex--;
+        PlayAudio(queue[currentSongIndex], queue[currentSongIndex]);
+    }
+}
+
+// Song queue management
+function AddAllToQueue(songs) {
+    songs.forEach(song => {
+        if (song.downloadUrl) {
+            var bitrate = document.getElementById('saavn-bitrate');
+            var bitrate_i = bitrate.options[bitrate.selectedIndex].value;
+            var download_url = song.downloadUrl[bitrate_i]['link'];
+            queue.push(download_url);
+        }
+    });
+    console.log("All songs added to queue.");
+}
+
+// Queue song details display
+function displayQueue() {
+    var queueContainer = document.getElementById("queue-container");
+    queueContainer.innerHTML = '';
+    queue.forEach((songUrl, index) => {
+        var song = results_objects[index].track;
+        var songItem = `<div class="queue-item">
+                            <span>${song.name} - ${song.album.name}</span>
+                            <button onclick="PlayAudio('${songUrl}', ${index})">Play</button>
+                        </div>`;
+        queueContainer.innerHTML += songItem;
+    });
+}
+
+// Add songs to the queue and display the queue
+async function doSaavnSearch(query) {
+    // Code to perform search and add songs to the queue
+    // After getting results, call AddAllToQueue(json)
+    // Then call displayQueue() to show the queue in the UI
+    var json = /* Get search results */
+    AddAllToQueue(json);
+    displayQueue();
+}
+
+// Event listeners for the controls
+document.getElementById("loadmore").addEventListener('click', nextPage);
+//yaha tk hai play next queue song
+
+// check process slider2
+
+// Initialize the audio player and queue
+var audioPlayer = document.getElementById("queueContainer");
+var queue = [];
+
+// Function to format time in MM:SS format
+function formatTime(seconds) {
+    var minutes = Math.floor(seconds / 60);
+    var seconds = Math.floor(seconds % 60);
+    return minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0");
+}
+
+// Function to update song time display
+function updateSongTime() {
+    var currentTimeFormatted = formatTime(audioPlayer.currentTime);
+    var durationFormatted = formatTime(audioPlayer.duration);
+    document.getElementById("song-time").textContent = currentTimeFormatted + " / " + durationFormatted;
+}
+
+// Function to update progress slider
+function updateProgress() {
+    var progressSlider = document.getElementById("progress-slider");
+    var progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+    progressSlider.value = progress;
+}
+
+// Auto-update progress slider and song time during playback
+audioPlayer.ontimeupdate = function () {
+    updateProgress();
+    updateSongTime();
+};
+
+// Handle progress slider change event
+document.getElementById("progress-slider").addEventListener("input", function () {
+    var progress = this.value;
+    audioPlayer.currentTime = (progress / 100) * audioPlayer.duration;
+    updateSongTime();
+});
+
+// Function to play a song and update the controller bar
+function playAudio(song) {
+    audioPlayer.src = song.src;
+    audioPlayer.play();
+
+    // Update the song details in the controller bar
+    document.getElementById("player-name").textContent = song.title;
+    document.getElementById("player-album").textContent = song.album;
+    document.getElementById("player-image").src = song.image;
+
+    updateSongTime(); // Initialize song time
+}
+
+// Function to extract song information and add to queue
+function addSongsToQueue() {
+    var results = document.querySelectorAll("#saavn-results .song-item"); // Update this selector based on actual structure of the #saavn-results container
+
+    results.forEach(function (songItem) {
+        var songData = {
+            title: songItem.querySelector(".song-title").textContent, // Modify as per actual structure
+            album: songItem.querySelector(".song-album").textContent, // Modify as per actual structure
+            image: songItem.querySelector(".song-image").src, // Modify as per actual structure
+            src: songItem.querySelector(".song-url").href // Modify as per actual structure
+        };
+
+        queue.push(songData); // Add to queue
+    });
+
+    // Optionally, play the first song automatically when songs are added to the queue
+    if (queue.length > 0) {
+        playAudio(queue[0]); // Play the first song from the queue
+    }
+}
+
+// Automatically add songs to the queue from #saavn-results when the page loads or on an event
+addSongsToQueue(); // You can call this when the page loads, or when new songs are added dynamically
+
+// Handle song end and move to the next song in queue
+audioPlayer.onended = function () {
+    if (queue.length > 0) {
+        var currentSongIndex = queue.indexOf(currentSong); // Get the index of the current song in the queue
+        if (currentSongIndex + 1 < queue.length) {
+            playAudio(queue[currentSongIndex + 1]); // Play next song in the queue
+        }
+    }
+};
+//endcode 3 for process
+// Function to update progress slider
+// Function to update the progress slider and song time
+function updateProgress() {
+    var progressSlider = document.getElementById("progress-slider"); // Your progress slider element
+    var currentTimeFormatted = formatTime(audioPlayer.currentTime); // Format current time
+    var durationFormatted = formatTime(audioPlayer.duration); // Format duration
+    var progress = (audioPlayer.currentTime / audioPlayer.duration) * 100; // Calculate progress percentage
+
+    // Set the slider value to the percentage of song played
+    progressSlider.value = progress;
+
+    // Update the song time display
+    document.getElementById("song-time").textContent = currentTimeFormatted + " / " + durationFormatted;
+}
+
+// Event listener to update the progress slider and song time while the song is playing
+audioPlayer.ontimeupdate = function() {
+    updateProgress();
+};
+
+// Function to format time in MM:SS format
+function formatTime(seconds) {
+    var minutes = Math.floor(seconds / 60);
+    var seconds = Math.floor(seconds % 60);
+    return minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0");
+}
+
+// Handle the progress slider change (seek feature)
+document.getElementById("progress-slider").addEventListener("input", function() {
+    var progress = this.value;
+    audioPlayer.currentTime = (progress / 100) * audioPlayer.duration; // Set current time based on slider value
+    updateProgress(); // Update song time display
+});
+/// process slider run code end
+
+
+
 function searchSong(search_term) {
     
 document.getElementById('search-box').value=search_term;
