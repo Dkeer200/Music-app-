@@ -90,20 +90,30 @@ Don't forget to star the repo
             </div>
         </div>
     </div>
-    <div id="audio-player" style="z-index: 99;background: #ffffff33; width: 100%;margin: 0px;color: var(--light);backdrop-filter: blur(4px);border-top-left-radius: 10px;border-top-right-radius: 20px;">
-        <div class="row" style="margin: 0px;">
-            <div class="col-auto fit-content" style="padding: 0px;">
-                <img class="img-fluid d-inline" id="player-image" style="height: 75px;width: 75px;border-radius: 10px;" src="https://i.pinimg.com/originals/ed/54/d2/ed54d2fa700d36d4f2671e1be84651df.jpg" loading="lazy">
-            </div>
-            <div class="col fit-content" style="padding: 0px;">
-                <div style="max-height: 24px;max-width: 95%;word-wrap: normal; padding-left: 20px;"><span id="player-name">Song</span><span><br></span><span id="player-album">Album</span></div><br>
-                <audio id="player" controls="controls" controlsList="nodownload" style="width: 100%;height: 30px; padding-left: 20px; padding-top:5px;">
-                    <source id="audioSource" src=""></source>
-                    Your browser does not support the audio format.
-                </audio>
-            </div>
+    <div id="audio-player" style="z-index: 99; background: #ffffff33; width: 100%; margin: 0px; color: var(--light); backdrop-filter: blur(4px); border-top-left-radius: 10px; border-top-right-radius: 20px; padding: 10px 0;">
+    <!-- Song Image and Name -->
+    <div class="row" style="margin: 0px; align-items: center;">
+    <!-- Image section to show the album art -->
+    <div class="col-auto fit-content" style="padding: 0px;">
+        <img class="img-fluid d-inline" id="player-image" style="height: 75px; width: 75px; border-radius: 10px;" src="https://i.pinimg.com/originals/ed/54/d2/ed54d2fa700d36d4f2671e1be84651df.jpg" loading="lazy">
+    </div>
+    <!-- Song and Album Name -->
+    <div class="col fit-content" style="padding: 0px;">
+        <div style="max-height: 24px; max-width: 95%; word-wrap: normal; padding-left: 20px;">
+            <span id="player-name">Song Name</span><br>
+            <span id="player-album">Album</span>
         </div>
     </div>
+</div>
+
+    <!-- Audio Controls -->
+
+    <div class="controls" style="text-align: center; margin-top: 10px;">
+        <button id="prev" class="control-button" onclick="prevSong()">&#9664;</button>
+        <button id="play-pause" class="control-button" onclick="togglePlayPause()">&#9658;</button>
+        <button id="next" class="control-button" onclick="nextSong()">&#9654;</button>
+    </div>
+
     <!-- floating downloader popup -->
     <div class=”float-button” style="width:30px; height:30px; border-radius:50%; background-color:#fff; box-shadow: 0 0 10px #000; cursor:pointer; position:fixed;top:50px; right:20px; z-index:9999;">
     <!-- download icon -->
