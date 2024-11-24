@@ -577,23 +577,4 @@ document.querySelector("#progress-bar").addEventListener("input", SeekAudio);
     <div>
         <p id="player-name">Song Name</p>
         <p id="player-album">Album Name</p>
-        <p id="song-time">00:00 / 00:00</p>
-    </div>
-    <input id="progress-bar" type="range" value="0" max="100" step="1" style="width:100%;">
-    <button id="play-pause" onclick="TogglePlayPause()">&#9658;</button>
-</div>
-*/
-
-// Function to toggle play/pause
-function TogglePlayPause() {
-    if (audioPlayer.paused) {
-        audioPlayer.play();
-        document.querySelector("#play-pause").innerHTML = "&#10074;&#10074;"; // Pause symbol
-    } else {
-        audioPlayer.pause();
-        document.querySelector("#play-pause").innerHTML = "&#9658;"; // Play symbol
-    }
-}
-
-
-// image play like server 
+        <p id="son
