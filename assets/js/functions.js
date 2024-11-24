@@ -123,9 +123,6 @@ function playAudio(url, songDetails) {
   // Ensure progress and time are updated
   updateProgress();
 }
-
-// Array of songs (example queue)
-
 // chevk process slider yaha tk
 
 // image show ke liye 
