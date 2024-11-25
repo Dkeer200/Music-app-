@@ -244,7 +244,7 @@ function nextPage() {
 if (window.location.hash) {
     doSaavnSearch(window.location.hash.substring(1));
 } else {
-    doSaavnSearch('english', 1);
+    doSaavnSearch('song', 1);
 }
 
 // Update on hash change
