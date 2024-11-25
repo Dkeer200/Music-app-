@@ -68,62 +68,210 @@ function updateSongDetails(songId) {
 
 
 //process slider code here 
-// Get references to the audio player and the progress slider
-var audioPlayer = new Audio(); // The global audio player
-var progressSlider = document.getElementById("progress-slider"); // Slider element
+// Assuming audioPlayer is already defined
+var audioPlayer = new Audio();
 
 // Function to format time in MM:SS format
 function formatTime(seconds) {
-  var minutes = Math.floor(seconds / 60);
-  var seconds = Math.floor(seconds % 60);
-  return minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0");
+    var minutes = Math.floor(seconds / 60);
+    var seconds = Math.floor(seconds % 60);
+    return minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0");
 }
 
-// Function to update the progress slider and song time display
+// Function to update song time display
+function updateSongTime() {
+    var currentTimeFormatted = formatTime(audioPlayer.currentTime); // Current time
+    var durationFormatted = formatTime(audioPlayer.duration); // Total duration
+    document.getElementById("song-time").textContent = currentTimeFormatted + " / " + durationFormatted;
+}
+
+// Function to update the progress slider
 function updateProgress() {
-  // Check if a song is loaded (duration > 0)
-  if (audioPlayer.duration > 0) {
-    // Calculate progress percentage
-    var progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-    // Set the slider value
-    progressSlider.value = progress;
-  }
+    var progressSlider = document.getElementById("progress-slider");
 
-  // Update song time display
-  var currentTimeFormatted = formatTime(audioPlayer.currentTime);
-  var durationFormatted = formatTime(audioPlayer.duration || 0); // Handle cases where duration isn't loaded yet
-  document.getElementById("song-time").textContent = currentTimeFormatted + " / " + durationFormatted;
+    // If audio duration is greater than 0 (song is loaded), update progress
+    if (audioPlayer.duration > 0) {
+        var progress = (audioPlayer.currentTime / audioPlayer.duration) * 100; // Calculate progress percentage
+        progressSlider.value = progress; // Update slider value
+    }
+
+    updateSongTime(); // Update song time display
 }
 
-// Event listener to update the slider and song time as the song plays
+// Event listener to update the progress slider and song time while the song is playing
 audioPlayer.ontimeupdate = function() {
-  updateProgress();
+    updateProgress();
 };
 
-// Event listener to allow seeking when the slider is adjusted
-progressSlider.addEventListener("input", function() {
-  // Calculate the new current time based on slider value
-  var newTime = (this.value / 100) * audioPlayer.duration;
-  // Update the current time of the audio player
-  audioPlayer.currentTime = newTime;
-  // Immediately update the time display
-  updateProgress();
+// Handle progress slider change (seek feature)
+document.getElementById("progress-slider").addEventListener("input", function() {
+    var progress = this.value; // Get the slider value
+    audioPlayer.currentTime = (progress / 100) * audioPlayer.duration; // Set current time based on slider value
+    updateSongTime(); // Update song time display
 });
 
-// Example of playing a song and initializing the slider
-function playAudio(url, songDetails) {
-  audioPlayer.src = url; // Set the song source
-  audioPlayer.play(); // Start playing the song
+// Function to play a song and update the controller bar
+function playAudio(song) {
+    audioPlayer.src = song.src;
+    audioPlayer.play();
 
-  // Update song details in the UI
-  document.getElementById("player-name").textContent = songDetails.title;
-  document.getElementById("player-album").textContent = songDetails.album;
-  document.getElementById("player-image").src = songDetails.image;
+    // Update the song details in the controller bar
+    document.getElementById("player-name").textContent = song.title;
+    document.getElementById("player-album").textContent = song.album;
+    document.getElementById("player-image").src = song.image;
 
-  // Ensure progress and time are updated
-  updateProgress();
+    updateSongTime(); // Initialize song time
+
+    // Update progress slider as the song plays
+    setInterval(updateProgress, 1000); // Update the progress every second
 }
+
+// Handle song end and move to the next song in queue (if any)
+audioPlayer.onended = function () {
+    if (queue.length > 0) {
+        var currentSongIndex = queue.indexOf(currentSong); // Get the index of the current song in the queue
+        if (currentSongIndex + 1 < queue.length) {
+            playAudio(queue[currentSongIndex + 1]); // Play next song in the queue
+        }
+    }
+};
 // chevk process slider yaha tk
+//notification settings start 
+self.addEventListener('push', function(event) {
+  var options = {
+    body: event.data.text(),
+    icon: '/icons/icon-192x192.png',
+    badge: '/icons/icon-192x192.png'
+  };
+
+  event.waitUntil(
+    self.registration.showNotification('New Notification', options)
+  );
+});
+// Check if the browser supports notifications
+if ('Notification' in window) {
+  // Request permission for notifications
+  Notification.requestPermission().then(function(permission) {
+    if (permission === "granted") {
+      console.log("Notification permission granted.");
+    } else {
+      console.log("Notification permission denied.");
+    }
+  });
+}
+
+// Ensure Service Worker is ready
+navigator.serviceWorker.ready.then(function(registration) {
+  // Check if PushManager is supported
+  if ('PushManager' in window) {
+    registration.pushManager.subscribe({
+      userVisibleOnly: true,  // The user will always see notifications
+      applicationServerKey: '<Your Public VAPID Key Here>'  // Use VAPID for security
+    })
+    .then(function(subscription) {
+      console.log('User is subscribed:', subscription);
+      // Send the subscription object to your server to save it
+    })
+    .catch(function(error) {
+      console.error('Subscription failed:', error);
+    });
+  }
+});
+
+self.addEventListener('push', function(event) {
+  var options = {
+    body: event.data.text(),
+    icon: '/icons/icon-192x192.png',
+    badge: '/icons/icon-192x192.png'
+  };
+
+  event.waitUntil(
+    self.registration.showNotification('New Notification', options)
+  );
+});
+
+self.addEventListener('push', function(event) {
+  var options = {
+    body: event.data.text(),
+    icon: '/icons/icon-192x192.png',
+    badge: '/icons/icon-192x192.png'
+  };
+
+  event.waitUntil(
+    self.registration.showNotification('New Notification', options)
+  );
+});
+
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();  // Close the notification
+  // Open a new window/tab with the URL you want
+  event.waitUntil(
+    clients.openWindow('https://your-website.com')
+  );
+});
+
+self.addEventListener('sync', function(event) {
+  if (event.tag === 'sync-notifications') {
+    // Handle syncing here
+  }
+});
+
+// Display notification in the notification bar
+function showNotification() {
+  if ('Notification' in window && Notification.permission === 'granted') {
+    navigator.serviceWorker.ready.then(function(registration) {
+      registration.showNotification('Song Title', {
+        body: 'Now playing: Artist Name',
+        icon: '/icons/icon-192x192.png',
+        badge: '/icons/icon-192x192.png',
+        actions: [
+          {
+            action: 'play',
+            title: 'Play',
+            icon: '/icons/play-icon.png'
+          },
+          {
+            action: 'pause',
+            title: 'Pause',
+            icon: '/icons/pause-icon.png'
+          }
+        ]
+      });
+    });
+  }
+}
+
+// Request notification permission
+if (Notification.permission !== 'granted') {
+  Notification.requestPermission();
+}
+
+// Call this function to show the notification
+showNotification();
+
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+
+  // Play/pause functionality
+  if (event.action === 'play') {
+    audioPlayer.play();
+  } else if (event.action === 'pause') {
+    audioPlayer.pause();
+  }
+
+  // Optionally, open the app window when the notification is clicked
+  clients.openWindow('/music-player'); // Open a page with the music player
+});
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+    console.log('Service Worker registered successfully:', registration);
+  }).catch(function(error) {
+    console.log('Service Worker registration failed:', error);
+  });
+}
+
+//notification settings code end
 
 // image show ke liye 
 
@@ -275,61 +423,39 @@ audioPlayer.onended = function () {
     }
 };
 //endcode 3 for process
-// Get references to the audio player and the progress slider
-var audioPlayer = new Audio(); // The global audio player
-var progressSlider = document.getElementById("progress-slider"); // Slider element
+// Function to update progress slider
+// Function to update the progress slider and song time
+function updateProgress() {
+    var progressSlider = document.getElementById("progress-slider"); // Your progress slider element
+    var currentTimeFormatted = formatTime(audioPlayer.currentTime); // Format current time
+    var durationFormatted = formatTime(audioPlayer.duration); // Format duration
+    var progress = (audioPlayer.currentTime / audioPlayer.duration) * 100; // Calculate progress percentage
+
+    // Set the slider value to the percentage of song played
+    progressSlider.value = progress;
+
+    // Update the song time display
+    document.getElementById("song-time").textContent = currentTimeFormatted + " / " + durationFormatted;
+}
+
+// Event listener to update the progress slider and song time while the song is playing
+audioPlayer.ontimeupdate = function() {
+    updateProgress();
+};
 
 // Function to format time in MM:SS format
 function formatTime(seconds) {
-  var minutes = Math.floor(seconds / 60);
-  var seconds = Math.floor(seconds % 60);
-  return minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0");
+    var minutes = Math.floor(seconds / 60);
+    var seconds = Math.floor(seconds % 60);
+    return minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0");
 }
 
-// Function to update the progress slider and song time display
-function updateProgress() {
-  // Check if a song is loaded (duration > 0)
-  if (audioPlayer.duration > 0) {
-    // Calculate progress percentage
-    var progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-    // Set the slider value
-    progressSlider.value = progress;
-  }
-
-  // Update song time display
-  var currentTimeFormatted = formatTime(audioPlayer.currentTime);
-  var durationFormatted = formatTime(audioPlayer.duration || 0); // Handle cases where duration isn't loaded yet
-  document.getElementById("song-time").textContent = currentTimeFormatted + " / " + durationFormatted;
-}
-
-// Event listener to update the slider and song time as the song plays
-audioPlayer.ontimeupdate = function() {
-  updateProgress();
-};
-
-// Event listener to allow seeking when the slider is adjusted
-progressSlider.addEventListener("input", function() {
-  // Calculate the new current time based on slider value
-  var newTime = (this.value / 100) * audioPlayer.duration;
-  // Update the current time of the audio player
-  audioPlayer.currentTime = newTime;
-  // Immediately update the time display
-  updateProgress();
+// Handle the progress slider change (seek feature)
+document.getElementById("progress-slider").addEventListener("input", function() {
+    var progress = this.value;
+    audioPlayer.currentTime = (progress / 100) * audioPlayer.duration; // Set current time based on slider value
+    updateProgress(); // Update song time display
 });
-
-// Example of playing a song and initializing the slider
-function playAudio(url, songDetails) {
-  audioPlayer.src = url; // Set the song source
-  audioPlayer.play(); // Start playing the song
-
-  // Update song details in the UI
-  document.getElementById("player-name").textContent = songDetails.title;
-  document.getElementById("player-album").textContent = songDetails.album;
-  document.getElementById("player-image").src = songDetails.image;
-
-  // Ensure progress and time are updated
-  updateProgress();
-}
 /// process slider run code end
 
 
@@ -438,3 +564,5 @@ function AddDownload(id) {
                   }}
               });}, 3000); // end interval
         } });}
+
+
