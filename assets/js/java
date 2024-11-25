@@ -1,0 +1,11 @@
+WebView myWebView = findViewById(R.id.webview);
+WebSettings webSettings = myWebView.getSettings();
+webSettings.setJavaScriptEnabled(true);
+
+myWebView.setWebViewClient(new WebViewClient());
+myWebView.setWebChromeClient(new WebChromeClient());
+
+myWebView.loadUrl("https://yourwebsite.com");
+
+// Disable auto-play in WebView (using JavaScript)
+myWebView.evaluateJavascript("document.querySelector('audio').pause();", null);
