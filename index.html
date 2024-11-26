@@ -114,8 +114,12 @@ Don't forget to star the repo
     </div>
 
     <!-- Progress Bar and Time -->
-    <div class="progress-container" style="margin-top: 10px;">
-        <input type="range" id="progress-slider" min="0" max="100" value="0" onchange="updateProgress()">
+  <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+        <input type="range" id="progress-slider" min="0" max="100" value="0" 
+               oninput="manualUpdate()" 
+               onmousedown="stopAutoUpdate()" 
+               onmouseup="resumeAutoUpdate()">
         <span id="song-time">00:00 / 00:00</span>
     </div>
 
