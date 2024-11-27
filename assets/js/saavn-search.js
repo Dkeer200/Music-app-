@@ -190,7 +190,7 @@ function UpdateControllerBar(songId) {
     document.querySelector("#player-image").src = song.image[1].link;
 
     // Update the progress bar time
-    document.querySelector("#song-time").innerText = `00:00 / ${play_time_str}`;
+    document.querySelector("#play_time").innerText = `00:00 / ${play_time_str}`;
     
     // Enable play/pause button
     document.querySelector("#play-pause").innerHTML = "&#10074;&#10074;"; // Pause symbol
@@ -206,15 +206,7 @@ audioPlayer.onended = function () {
     }
 };
 
-// Function to download the song
-function DownloadSong(url) {
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'song.mp3';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
+
 
 // Helper function to shorten text (for song/album names)
 function TextAbstract(text, length) {
@@ -244,8 +236,9 @@ function nextPage() {
 if (window.location.hash) {
     doSaavnSearch(window.location.hash.substring(1));
 } else {
-    doSaavnSearch('song', 1);
+    doSaavnSearch('Song name', 1);
 }
+
 
 // Update on hash change
 addEventListener('hashchange', event => {
@@ -451,6 +444,34 @@ function TogglePlayPause() {
     }
 }
 
+// Function to update the controller bar
+function UpdateControllerBar(songId) {
+    var song = results_objects[songId].track;
+    var song_name = song.name;
+    var song_artist = song.primaryArtists;
+    var album_name = song.album.name;
+    var play_time = new Date(null);
+    play_time.setSeconds(song.duration);
+    var play_time_str = play_time.toISOString().substr(11, 8);
+
+    // Update the UI elements (example IDs used)
+    document.getElementById("song-name").textContent = song_name;
+    document.getElementById("song-artist").textContent = song_artist;
+    document.getElementById("album-name").textContent = album_name;
+    document.getElementById("play-time").textContent = play_time_str;
+}
+
+// Adding event listener for the "Next" button
+document.getElementById("play-pause").addEventListener("click", function () {
+    // Assuming you maintain a currentSongIndex and totalSongs
+    if (currentSongIndex < totalSongs - 1) {
+        currentSongIndex++;
+        UpdateControllerBar(currentSongIndex);
+    } else {
+        console.log("End of playlist");
+    }
+});
+
 
 //update auto song details 
 // Auto-play next song in queue when current song ends
@@ -473,8 +494,8 @@ audioPlayer.onended = function () {
 
 function UpdateSlider() {
     const slider = document.querySelector("#progress-slider");
-    const currentTimeElement = document.querySelector("#current-time");
-    const totalTimeElement = document.querySelector("#total-time");
+    const currentTimeElement = document.querySelector("#play-time");
+    const totalTimeElement = document.querySelector("#play-time");
 
     // Update slider and time at regular intervals
     audioPlayer.ontimeupdate = function () {
@@ -505,8 +526,8 @@ function UpdateControllerBar(songId) {
     // Reset slider and time
     const slider = document.querySelector("#progress-slider");
     slider.value = 0;
-    document.querySelector("#current-time").innerText = "00:00";
-    document.querySelector("#total-time").innerText = formatTime(song.duration);
+    document.querySelector("#play-time").innerText = "00:00";
+    document.querySelector("#play-time").innerText = formatTime(song.duration);
 }
 
 
@@ -537,7 +558,7 @@ audioPlayer.onended = function () {
 // Update slider progress and time while the song plays
 audioPlayer.ontimeupdate = function () {
     var progressBar = document.querySelector("#progress-bar");
-    var songTime = document.querySelector("#song-time");
+    var songTime = document.querySelector("#play-time");
     
     if (audioPlayer.duration) {
         // Update the progress bar value
@@ -577,23 +598,8 @@ document.querySelector("#progress-bar").addEventListener("input", SeekAudio);
     <div>
         <p id="player-name">Song Name</p>
         <p id="player-album">Album Name</p>
-        <p id="song-time">00:00 / 00:00</p>
-    </div>
-    <input id="progress-bar" type="range" value="0" max="100" step="1" style="width:100%;">
-    <button id="play-pause" onclick="TogglePlayPause()">&#9658;</button>
-</div>
-*/
-
-// Function to toggle play/pause
-function TogglePlayPause() {
-    if (audioPlayer.paused) {
-        audioPlayer.play();
-        document.querySelector("#play-pause").innerHTML = "&#10074;&#10074;"; // Pause symbol
-    } else {
-        audioPlayer.pause();
-        document.querySelector("#play-pause").innerHTML = "&#9658;"; // Play symbol
-    }
-}
-
-
-// image play like server 
+        <p id="
+       */
+       
+       
+  
