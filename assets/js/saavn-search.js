@@ -227,7 +227,7 @@ document.getElementById("loadmore").addEventListener('click', nextPage);
 
 // Function to handle next
 // Function to handle next page load
-const randomKeywords = [' ', 'party', 'rain', 'happy', 'Shambhu' 'rock', 'classical', '2024', 'Motivational', 'dance', 'new'];
+const randomKeywords = [' ', 'party', 'rain', 'happy', 'Shambhu', 'rock', 'classical', '2024', 'Motivational', 'dance', 'new'];
 
 // Function to get a random keyword
 function getRandomKeyword() {
