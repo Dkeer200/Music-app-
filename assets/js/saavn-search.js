@@ -227,6 +227,14 @@ document.getElementById("loadmore").addEventListener('click', nextPage);
 
 // Function to handle next
 // Function to handle next page load
+const randomKeywords = [' ', 'party', 'rain', 'happy', 'sad', 'rock', 'classical', '2024', 'Motivational', 'dance', 'new'];
+
+// Function to get a random keyword
+function getRandomKeyword() {
+    return randomKeywords[Math.floor(Math.random() * randomKeywords.length)];
+}
+
+// Function to handle next page load
 function nextPage() {
     page_index++;
     doSaavnSearch(lastSearch, false, page_index);
@@ -236,14 +244,17 @@ function nextPage() {
 if (window.location.hash) {
     doSaavnSearch(window.location.hash.substring(1));
 } else {
-    doSaavnSearch('Song name', 1);
+    // Auto search with a random keyword
+    const randomSearch = getRandomKeyword();
+    doSaavnSearch(randomSearch, 1);
 }
-
 
 // Update on hash change
 addEventListener('hashchange', event => {
     doSaavnSearch(window.location.hash.substring(1));
 });
+
+
 //main sever code end
 // Auto-play next song in queue when current song ends
 audioPlayer.onended = function () {
