@@ -18,8 +18,8 @@ Don't forget to star the repo
         document.getElementById('downloadButton').addEventListener('click', function () {
             // Creating a temporary link element
             const link = document.createElement('a');
-            link.href = '/app-foss-release.apk'; // Replace with your APK file URL
-            link.download = '/app-foss-release.apk'; // Replace with the desired file name
+            link.href = 'assets/app-foss-release.apk'; // Replace with your APK file URL
+            link.download = 'assets/app-foss-release.apk'; // Replace with the desired file name
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
