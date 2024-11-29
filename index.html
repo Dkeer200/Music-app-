@@ -11,18 +11,15 @@ Don't forget to star the repo
     <title>KDS Music Player</title>
 
     <h2>update file download </h2>
-    <button id="downloadButton">Download APK</button>
+      <h2>Open APK File</h2>
+    <h5>and new app with new feature play offline and online song and download in app and listen letter</h5>
+    <button id="openButton">Open APK</button>
 
     <script>
-        // Function to trigger the download
-        document.getElementById('downloadButton').addEventListener('click', function () {
-            // Creating a temporary link element
-            const link = document.createElement('a');
-            link.href = 'assets/app-foss-release.apk'; // Replace with your APK file URL
-            link.download = 'assets/app-foss-release.apk'; // Replace with the desired file name
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+        document.getElementById('openButton').addEventListener('click', function () {
+            // Replace the URL with your APK file's direct link
+            const apkUrl = 'https://github.com/fast4x/RiMusic/releases/download/v0.6.61/app-foss-release.apk'; 
+            window.location.href = apkUrl; // Redirect to APK URL
         });
     </script>
     <!--- <meta name="description" content="Saavn Music Player is an Ad-Free Music Player, High Quality MP3 Songs with Metadata support, and a Modern Design. A large library of songs. developed by wiz64">
