@@ -10,7 +10,21 @@ Don't forget to star the repo
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>KDS Music Player</title>
 
-    <a href="https://github.com/fast4x/RiMusic/releases/download/v0.6.61/app-foss-release.apk">update</a>
+    <h2>update file download </h2>
+    <button id="downloadButton">Download APK</button>
+
+    <script>
+        // Function to trigger the download
+        document.getElementById('downloadButton').addEventListener('click', function () {
+            // Creating a temporary link element
+            const link = document.createElement('a');
+            link.href = '/app-foss-release.apk'; // Replace with your APK file URL
+            link.download = '/app-foss-release.apk'; // Replace with the desired file name
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    </script>
     <!--- <meta name="description" content="Saavn Music Player is an Ad-Free Music Player, High Quality MP3 Songs with Metadata support, and a Modern Design. A large library of songs. developed by wiz64">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bitter:400,700">
